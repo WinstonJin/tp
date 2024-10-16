@@ -4,8 +4,9 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NICKNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -44,7 +45,8 @@ public class EditCommand extends Command {
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_ROLE + "TAG]...\n"
+            + "[" + PREFIX_ROLE + "TAG]"
+            + "[" + PREFIX_NICKNAME + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_TELEGRAM + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -100,7 +102,7 @@ public class EditCommand extends Command {
         Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Set<Role> updatedRoles = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        Set<Role> updatedRoles = editPersonDescriptor.getRoles().orElse(personToEdit.getTags());
         Nickname updatedNickname = editPersonDescriptor.getNickname().orElse(personToEdit.getNickname());
         return new Person(updatedName, updatedTelegram, updatedEmail, updatedAddress, updatedRoles, updatedNickname);
     }
@@ -152,7 +154,7 @@ public class EditCommand extends Command {
             setTelegram(toCopy.telegram);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
-            setTags(toCopy.roles);
+            setRoles(toCopy.roles);
             setNickname(toCopy.nickname);
         }
 
@@ -160,7 +162,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, telegram, email, address, roles);
+            return CollectionUtil.isAnyNonNull(name, telegram, email, address, roles, nickname);
         }
 
         public void setName(Name name) {
@@ -199,7 +201,7 @@ public class EditCommand extends Command {
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
          */
-        public void setTags(Set<Role> roles) {
+        public void setRoles(Set<Role> roles) {
             this.roles = (roles != null) ? new HashSet<>(roles) : null;
         }
 
@@ -208,7 +210,7 @@ public class EditCommand extends Command {
          * if modification is attempted.
          * Returns {@code Optional#empty()} if {@code tags} is null.
          */
-        public Optional<Set<Role>> getTags() {
+        public Optional<Set<Role>> getRoles() {
             return (roles != null) ? Optional.of(Collections.unmodifiableSet(roles)) : Optional.empty();
         }
 
